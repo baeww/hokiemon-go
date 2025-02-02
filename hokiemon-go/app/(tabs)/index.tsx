@@ -38,61 +38,45 @@ export default function HomeScreen() {
 
   return (
     <ThemedView style={styles.container}>
-      <Image
-        source={require('@/assets/images/partial-react-logo.png')}
-        style={styles.reactLogo}
-      />
+      <ThemedText type="title" style={styles.text}>{isLogin ? 'Login' : 'Sign Up'}</ThemedText> {/* Moved title higher */}
       
       <View style={styles.tabContainer}>
         <Button 
           title="Login" 
           onPress={() => setIsLogin(true)} 
           disabled={isLogin}
+          color="maroon" // Changed button color to maroon
         />
         <Button 
           title="Sign Up" 
           onPress={() => setIsLogin(false)} 
           disabled={!isLogin}
+          color="orange" // Changed button color to orange
         />
       </View>
 
-      <ThemedText type="title">{isLogin ? 'Login' : 'Sign Up'}</ThemedText>
-
       <View style={styles.inputContainer}>
         <TextInput
-          style={styles.input}
+          style={[styles.input, styles.text]}
           placeholder="Username"
+          placeholderTextColor="maroon" // Changed placeholder text color to maroon
           value={username}
           onChangeText={setUsername}
         />
         <TextInput
-          style={styles.input}
+          style={[styles.input, styles.text]}
           placeholder="Password"
+          placeholderTextColor="orange" // Changed placeholder text color to orange
           secureTextEntry
           value={password}
           onChangeText={setPassword}
         />
       </View>
 
-      {error && <Text style={styles.errorText}>{error}</Text>}
+      {error && <Text style={[styles.errorText, styles.text]}>{error}</Text>}
 
-      <Button title={isLogin ? "Login" : "Sign Up"} onPress={isLogin ? handleLogin : handleSignUp} />
+      <Button title={isLogin ? "Login" : "Sign Up"} onPress={isLogin ? handleLogin : handleSignUp} color="maroon" /> {/* Changed button color to maroon */}
 
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12'
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
     </ThemedView>
   );
 }
@@ -103,11 +87,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    marginBottom: 36,
   },
   tabContainer: {
     flexDirection: 'row',
@@ -131,9 +110,8 @@ const styles = StyleSheet.create({
     color: 'red',
     marginBottom: 12,
   },
-  stepContainer: {
-    gap: 8,
-    marginTop: 20,
+  text: {
+    color: 'maroon', // Changed text color to maroon
   },
 });
 
