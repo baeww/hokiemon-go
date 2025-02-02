@@ -2,6 +2,7 @@
 from flask import Flask, request, jsonify
 from pymongo import MongoClient
 from flask_cors import CORS  # Import CORS
+from bson import ObjectId  # Import ObjectId from bson
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
@@ -9,7 +10,7 @@ CORS(app)  # Enable CORS for all routes
 # MongoDB connection
 uri = "mongodb+srv://wbae:atlasPassword@cluster0.ck0or.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 client = MongoClient(uri)
-db = client['app']  # Replace with your database name
+db = client['hokiemon']  # Replace with your database name
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -17,12 +18,18 @@ def login():
     username = data.get('username')
     password = data.get('password')
     
+    print(username)
+    print(password)
+
+
     # Example: Check user credentials in the database
-    user = db.users.find_one({'username': username, 'password': password})  # Adjust according to your schema
+    user = db.app.find_one({'username': username, 'password': password})  # Adjust according to your schema
+    print(user)
+    
     if user:
         return jsonify({'message': 'Login successful'}), 200
     else:
-        return jsonify({'message': 'Invalid credentials'}), 200
+        return jsonify({'message': 'Invalid credentials'}), 401
 
 @app.route('/signup', methods=['POST'])
 def signup():
@@ -38,6 +45,25 @@ def signup():
     # Insert new user into the database
     db.users.insert_one({'username': username, 'password': password})  # Adjust according to your schema
     return jsonify({'message': 'User created successfully'}), 201
+
+@app.route('/print_db', methods=['GET'])
+def print_db():
+    # Retrieve all users from the database
+    users = list(db.app.find())  # Adjust according to your collection name
+
+    user = db.app.find_one({'username':"hello"})
+    print(user)
+
+    print("Database contents:", users)  # Print contents to the console
+    return jsonify(None), 200  # Return the contents as JSON
+
+
+
+
+    # db_names = client.list_database_names()  # Get the list of database names
+    # print("Database names:", db_names)  # Print database names to the console
+    # return jsonify(db_names), 200
+
 
 if __name__ == '__main__':
     app.run(debug=True)
