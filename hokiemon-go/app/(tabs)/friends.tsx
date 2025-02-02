@@ -12,16 +12,17 @@ import { IconSymbol } from '@/components/ui/IconSymbol';
 interface Friend {
   id: string;
   name: string;
-  age: number;
-  city: string;
+  birthday: string;
+  context: string;
   occupation: string;
+  date: string;
 }
 
 // Sample friends data with the new type
 const friendsData: Friend[] = [
-  { id: '1', name: 'Alice', age: 25, city: 'New York', occupation: 'Software Engineer' },
-  { id: '2', name: 'Bob', age: 30, city: 'Los Angeles', occupation: 'Designer' },
-  { id: '3', name: 'Charlie', age: 28, city: 'Chicago', occupation: 'Product Manager' },
+  { id: '1', name: 'Alice', birthday: "10/5/2003", context: 'Hackviolet 2024', occupation: 'Software Engineer', date: "01/15/2023" },
+  { id: '2', name: 'Bob', birthday: "12/15/2002", context: 'Hackviolet 2024', occupation: 'Designer', date: "01/20/2023" },
+  { id: '3', name: 'Charlie', birthday: "11/20/2001", context: 'Hackviolet 2024', occupation: 'Product Manager', date: "01/25/2023" },
 ];
 
 export default function TabTwoScreen() {
@@ -56,13 +57,12 @@ export default function TabTwoScreen() {
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Friends</ThemedText>
       </ThemedView>
-      <ThemedText>This app includes example code to help you get started.</ThemedText>
 
       {/* Friends Table */}
       <DataTable>
         <DataTable.Header>
           <DataTable.Title>Name</DataTable.Title>
-          <DataTable.Title numeric>Age</DataTable.Title>
+          <DataTable.Title >Date Met</DataTable.Title>
         </DataTable.Header>
 
         {friendsData.map((friend) => (
@@ -73,7 +73,7 @@ export default function TabTwoScreen() {
                 <ThemedText>{friend.name}</ThemedText>
               </TouchableOpacity>
             </DataTable.Cell>
-            <DataTable.Cell numeric>{friend.age}</DataTable.Cell>
+            <DataTable.Cell>{friend.date}</DataTable.Cell>
           </DataTable.Row>
         ))}
       </DataTable>
@@ -92,9 +92,13 @@ export default function TabTwoScreen() {
         <View style={styles.modalContainer}>
           {selectedFriend && (
             <>
+              <Image 
+                source={{ uri: 'https://example.com/path/to/image.jpg' }} // Add the image source here
+                style={styles.modalImage} // Add a style for the image
+              />
               <Text style={styles.modalTitle}>{selectedFriend.name}</Text>
-              <Text style={styles.modalText}>Age: {selectedFriend.age}</Text>
-              <Text style={styles.modalText}>City: {selectedFriend.city}</Text>
+              <Text style={styles.modalText}>Birthday: {selectedFriend.birthday}</Text>
+              <Text style={styles.modalText}>Where we met: {selectedFriend.context}</Text>
               <Text style={styles.modalText}>Occupation: {selectedFriend.occupation}</Text>
             </>
           )}
@@ -103,77 +107,6 @@ export default function TabTwoScreen() {
           </TouchableOpacity>
         </View>
       </Modal>
-
-      <Collapsible title="File-based routing">
-        <ThemedText>
-          This app has two screens:{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/friends.tsx</ThemedText>
-        </ThemedText>
-        <ThemedText>
-          The layout file in <ThemedText type="defaultSemiBold">app/(tabs)/_layout.tsx</ThemedText>{' '}
-          sets up the tab navigator.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/router/introduction">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-
-      <Collapsible title="Android, iOS, and web support">
-        <ThemedText>
-          You can open this project on Android, iOS, and the web. To open the web version, press{' '}
-          <ThemedText type="defaultSemiBold">w</ThemedText> in the terminal running this project.
-        </ThemedText>
-      </Collapsible>
-
-      <Collapsible title="Images">
-        <ThemedText>
-          For static images, you can use the <ThemedText type="defaultSemiBold">@2x</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">@3x</ThemedText> suffixes to provide files for
-          different screen densities
-        </ThemedText>
-        <Image source={require('@/assets/images/react-logo.png')} style={{ alignSelf: 'center' }} />
-        <ExternalLink href="https://reactnative.dev/docs/images">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Custom fonts">
-        <ThemedText>
-          Open <ThemedText type="defaultSemiBold">app/_layout.tsx</ThemedText> to see how to load{' '}
-          <ThemedText style={{ fontFamily: 'SpaceMono' }}>
-            custom fonts such as this one.
-          </ThemedText>
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/versions/latest/sdk/font">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Light and dark mode components">
-        <ThemedText>
-          This template has light and dark mode support. The{' '}
-          <ThemedText type="defaultSemiBold">useColorScheme()</ThemedText> hook lets you inspect
-          what the user's current color scheme is, and so you can adjust UI colors accordingly.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/develop/user-interface/color-themes/">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Animations">
-        <ThemedText>
-          This template includes an example of an animated component. The{' '}
-          <ThemedText type="defaultSemiBold">components/HelloWave.tsx</ThemedText> component uses
-          the powerful <ThemedText type="defaultSemiBold">react-native-reanimated</ThemedText>{' '}
-          library to create a waving hand animation.
-        </ThemedText>
-        {Platform.select({
-          ios: (
-            <ThemedText>
-              The <ThemedText type="defaultSemiBold">components/ParallaxScrollView.tsx</ThemedText>{' '}
-              component provides a parallax effect for the header image.
-            </ThemedText>
-          ),
-        })}
-      </Collapsible>
     </ParallaxScrollView>
   );
 }
@@ -227,5 +160,11 @@ const styles = StyleSheet.create({
   closeButtonText: {
     color: 'white',
     fontSize: 18,
+  },
+  modalImage: {
+    width: '100%', // Adjust width as needed
+    height: 200, // Set a height for the image
+    borderRadius: 10, // Optional: add border radius
+    marginBottom: 10, // Space between image and text
   },
 });

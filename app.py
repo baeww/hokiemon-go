@@ -3,6 +3,7 @@ from flask import Flask, request, jsonify
 from pymongo import MongoClient
 from flask_cors import CORS  # Import CORS
 from bson import ObjectId  # Import ObjectId from bson
+import re
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
@@ -57,13 +58,28 @@ def print_db():
     print("Database contents:", users)  # Print contents to the console
     return jsonify(None), 200  # Return the contents as JSON
 
-
-
-
     # db_names = client.list_database_names()  # Get the list of database names
     # print("Database names:", db_names)  # Print database names to the console
     # return jsonify(db_names), 200
 
+@app.route('/search', methods=['POST'])
+def search():
+    data = request.json
+    username = data.get('username', '')
+
+    # Create a regex pattern for case-insensitive search
+    regex_pattern = re.compile(f'.*{username}.*', re.IGNORECASE)
+
+    # Find users matching the regex pattern and limit to 5 results
+    users = list(db.app.find({'username': regex_pattern}).limit(5))
+
+    print(users)
+
+    # Convert ObjectId to string if necessary
+    for user in users:
+        user['_id'] = str(user['_id'])  # Convert ObjectId to string
+
+    return jsonify({'message': 'Search successful', 'users': users}), 200
 
 if __name__ == '__main__':
     app.run(debug=True)
