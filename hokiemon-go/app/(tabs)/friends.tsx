@@ -1,11 +1,18 @@
-import { StyleSheet, Image, Platform } from 'react-native';
-
+import { StyleSheet, Image, Platform, View } from 'react-native';
+import { DataTable } from 'react-native-paper';
 import { Collapsible } from '@/components/Collapsible';
 import { ExternalLink } from '@/components/ExternalLink';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { IconSymbol } from '@/components/ui/IconSymbol';
+
+const friendsData = [
+  { id: '1', name: 'Alice', age: 25 },
+  { id: '2', name: 'Bob', age: 30 },
+  { id: '3', name: 'Charlie', age: 28 },
+  // Add more friends as needed
+];
 
 export default function TabTwoScreen() {
   return (
@@ -20,14 +27,30 @@ export default function TabTwoScreen() {
         />
       }>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Explore</ThemedText>
+        <ThemedText type="title">Friends</ThemedText>
       </ThemedView>
       <ThemedText>This app includes example code to help you get started.</ThemedText>
+
+      {/* Friends Table */}
+      <DataTable>
+        <DataTable.Header>
+          <DataTable.Title>Name</DataTable.Title>
+          <DataTable.Title numeric>Age</DataTable.Title>
+        </DataTable.Header>
+
+        {friendsData.map(friend => (
+          <DataTable.Row key={friend.id}>
+            <DataTable.Cell>{friend.name}</DataTable.Cell>
+            <DataTable.Cell numeric>{friend.age}</DataTable.Cell>
+          </DataTable.Row>
+        ))}
+      </DataTable>
+
       <Collapsible title="File-based routing">
         <ThemedText>
           This app has two screens:{' '}
           <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/explore.tsx</ThemedText>
+          <ThemedText type="defaultSemiBold">app/(tabs)/friends.tsx</ThemedText>
         </ThemedText>
         <ThemedText>
           The layout file in <ThemedText type="defaultSemiBold">app/(tabs)/_layout.tsx</ThemedText>{' '}
