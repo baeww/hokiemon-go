@@ -1,19 +1,37 @@
-import React, { useState } from 'react';
-import { Image, StyleSheet, TextInput, Button, View, Text, Platform } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Image, StyleSheet, TextInput, Button, View, Text, Platform, Alert } from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import axios from 'axios';
 
 export default function HomeScreen() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [isLogin, setIsLogin] = useState(true);
+  
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post('http://127.0.0.1:5000/login', {
+        username,
+        password,
+      });
+      Alert.alert(response.data.message);
+    } catch (error: any) {
+      Alert.alert('Error', error.response?.data?.message || 'Login failed');
+    }
+  };
 
-  const handleLogin = () => {
-    if (username === 'admin' && password === 'password') {
-      setError(null);
-      alert('Login successful!');
-    } else {
-      setError('Invalid credentials, please try again.');
+  const handleSignUp = async () => {
+    try {
+      const response = await axios.post('http://<your-flask-server-ip>:5000/signup', {
+        username,
+        password,
+      });
+      Alert.alert(response.data.message);
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message || 'Sign up failed';
+      Alert.alert('Error', errorMessage);
     }
   };
 
@@ -23,7 +41,21 @@ export default function HomeScreen() {
         source={require('@/assets/images/partial-react-logo.png')}
         style={styles.reactLogo}
       />
-      <ThemedText type="title">Login</ThemedText>
+      
+      <View style={styles.tabContainer}>
+        <Button 
+          title="Login" 
+          onPress={() => setIsLogin(true)} 
+          disabled={isLogin}
+        />
+        <Button 
+          title="Sign Up" 
+          onPress={() => setIsLogin(false)} 
+          disabled={!isLogin}
+        />
+      </View>
+
+      <ThemedText type="title">{isLogin ? 'Login' : 'Sign Up'}</ThemedText>
 
       <View style={styles.inputContainer}>
         <TextInput
@@ -43,7 +75,7 @@ export default function HomeScreen() {
 
       {error && <Text style={styles.errorText}>{error}</Text>}
 
-      <Button title="Login" onPress={handleLogin} />
+      <Button title={isLogin ? "Login" : "Sign Up"} onPress={isLogin ? handleLogin : handleSignUp} />
 
       <ThemedView style={styles.stepContainer}>
         <ThemedText type="subtitle">Step 1: Try it</ThemedText>
@@ -75,6 +107,12 @@ const styles = StyleSheet.create({
     height: 178,
     width: 290,
     marginBottom: 36,
+  },
+  tabContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '100%',
+    marginBottom: 20,
   },
   inputContainer: {
     width: '100%',
